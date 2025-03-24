@@ -37,7 +37,6 @@ const formSteps = [
 export function ContractForm({ onContractDataChange }: ContractFormProps) {
   const [contractData, setContractData] = useState<ContractData>(defaultContractData);
   const [currentStep, setCurrentStep] = useState(0);
-  const [date, setDate] = useState<Date | undefined>();
   const [eventDate, setEventDate] = useState<Date | undefined>();
   const [priceDialogOpen, setPriceDialogOpen] = useState(false);
   
@@ -59,15 +58,6 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
     contractData.extraWaiterPrice,
     onContractDataChange
   ]);
-
-  useEffect(() => {
-    if (date) {
-      setContractData(prev => ({
-        ...prev,
-        signatureDate: format(date, 'dd/MM/yyyy', { locale: ptBR })
-      }));
-    }
-  }, [date]);
 
   useEffect(() => {
     if (eventDate) {
@@ -234,34 +224,6 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
                   value={contractData.clientAddress}
                   onChange={handleInputChange}
                 />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="signatureDate">Data de Assinatura</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP", { locale: ptBR }) : <span>Selecionar data</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      locale={ptBR}
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
               </div>
             </motion.div>
           )}
