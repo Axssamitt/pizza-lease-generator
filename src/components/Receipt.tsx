@@ -13,6 +13,7 @@ interface ReceiptProps {
 const Receipt: React.FC<ReceiptProps> = ({ contractData }) => {
   const receiptRef = useRef<HTMLDivElement>(null);
   const currentDate = new Date().toLocaleDateString('pt-BR');
+  const receiptNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
   
   const handlePrint = () => {
     if (receiptRef.current) {
@@ -31,30 +32,60 @@ const Receipt: React.FC<ReceiptProps> = ({ contractData }) => {
                   max-width: 800px;
                   margin: 0 auto;
                 }
-                .receipt {
-                  border: 1px solid #ccc;
+                .receipt-container {
+                  border: 2px solid #333;
+                  border-radius: 30px;
                   padding: 20px;
-                  border-radius: 5px;
+                  position: relative;
                 }
-                h1, h2 {
-                  text-align: center;
+                .receipt-header {
+                  display: flex;
+                  align-items: center;
+                  margin-bottom: 20px;
                 }
-                .content {
-                  margin-top: 20px;
-                  text-align: justify;
+                .receipt-title {
+                  font-size: 32px;
+                  font-weight: bold;
+                  margin-right: 10px;
                 }
-                .footer {
+                .receipt-number, .receipt-value {
+                  background-color: #aaa;
+                  padding: 8px 15px;
+                  color: #000;
+                  font-weight: bold;
+                  margin-left: 10px;
+                }
+                .receipt-row {
+                  display: flex;
+                  margin-bottom: 15px;
+                }
+                .receipt-label {
+                  width: 150px;
+                  font-weight: normal;
+                }
+                .receipt-content {
+                  flex: 1;
+                  border-bottom: 1px solid #333;
+                  font-weight: bold;
+                  text-transform: uppercase;
+                }
+                .receipt-footer {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
                   margin-top: 40px;
+                }
+                .receipt-date {
+                  align-self: flex-end;
+                  margin-bottom: 20px;
+                }
+                .receipt-signature {
+                  margin-top: 10px;
                   text-align: center;
                 }
-                .signature {
-                  margin-top: 60px;
-                  text-align: center;
-                  border-top: 1px solid #333;
-                  padding-top: 10px;
-                  width: 70%;
-                  margin-left: auto;
-                  margin-right: auto;
+                .receipt-signature img {
+                  width: 150px;
+                  margin-bottom: 10px;
                 }
                 @media print {
                   body {
@@ -79,7 +110,7 @@ const Receipt: React.FC<ReceiptProps> = ({ contractData }) => {
     }
   };
 
-  const amountInWords = numberToWords(contractData.downPayment);
+  const amountInWords = numberToWords(contractData.downPayment).toUpperCase();
   
   return (
     <Card className="shadow-md border border-border/40">
@@ -88,37 +119,56 @@ const Receipt: React.FC<ReceiptProps> = ({ contractData }) => {
       </CardHeader>
       <CardContent>
         <div ref={receiptRef} className="receipt">
-          <div className="text-center font-bold text-xl mb-6">
-            RECIBO
-          </div>
-          
-          <div className="text-center mb-4">
-            Nº {Math.floor(Math.random() * 10000).toString().padStart(4, '0')}/{new Date().getFullYear()}
-          </div>
-          
-          <div className="mb-6 text-center text-2xl font-bold">
-            {formatCurrency(contractData.downPayment)}
-          </div>
-          
-          <div className="content text-justify">
-            <p>
-              Recebi de <strong>{contractData.clientName.toUpperCase()}</strong>, 
-              inscrito no CPF sob o nº <strong>{contractData.clientCpf}</strong>, 
-              a importância de <strong>{formatCurrency(contractData.downPayment)}</strong> 
-              (<em>{amountInWords}</em>), referente ao sinal de pagamento para o serviço 
-              de rodízio de pizzas a ser realizado no evento do dia <strong>{contractData.eventDate}</strong>, 
-              no endereço: <strong>{contractData.eventAddress}</strong>.
-            </p>
-          </div>
-          
-          <div className="footer">
-            <p>Londrina, {currentDate}</p>
-          </div>
-          
-          <div className="signature">
-            Júlio Cesar Fermino<br />
-            Julio's Pizza House<br />
-            CPF: 034.988.389-03
+          <div className="border-2 border-black rounded-[30px] p-5 relative">
+            <div className="flex items-center mb-6">
+              <div className="text-3xl font-bold mr-2">RECIBO</div>
+              <div className="ml-2">Nº</div>
+              <div className="bg-gray-400 text-black px-4 py-1 mx-2 font-bold">{receiptNumber}</div>
+              <div className="ml-2">VALOR</div>
+              <div className="bg-gray-400 text-black px-4 py-1 mx-2 font-bold">
+                {formatCurrency(contractData.downPayment)}
+              </div>
+            </div>
+            
+            <div className="mb-4 flex">
+              <div className="w-[150px]">Recebi(emos) de</div>
+              <div className="flex-1 border-b border-black font-bold uppercase">
+                {contractData.clientName}
+              </div>
+            </div>
+            
+            <div className="mb-4 flex">
+              <div className="w-[150px]">a quantia de</div>
+              <div className="flex-1 border-b border-black font-bold uppercase">
+                {amountInWords}
+              </div>
+            </div>
+            
+            <div className="mb-4 flex">
+              <div className="w-[150px]">Correspondente a</div>
+              <div className="flex-1 border-b border-black font-bold uppercase">
+                ENTRADA DO EVENTO A SE REALIZAR NA DATA DE {contractData.eventDate}
+              </div>
+            </div>
+            
+            <div className="mb-4 border-b border-black"></div>
+            
+            <div className="mb-8">
+              e para clareza firmo(amos) o presente
+            </div>
+            
+            <div className="flex justify-end mb-4">
+              <div>LONDRINA, {currentDate}</div>
+            </div>
+            
+            <div className="flex flex-col items-center mt-8 mb-2">
+              <div className="text-2xl font-bold mb-4">JULIO'S PIZZA HOUSE</div>
+              <img 
+                src="/lovable-uploads/212f29be-bd28-418c-9bd9-290db432f429.png" 
+                alt="Assinatura" 
+                className="w-[150px] h-auto object-contain opacity-60 mb-2"
+              />
+            </div>
           </div>
         </div>
       </CardContent>
