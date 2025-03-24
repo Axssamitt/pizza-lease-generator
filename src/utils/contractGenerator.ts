@@ -1,4 +1,3 @@
-
 export interface ContractData {
   // Cliente
   clientName: string;

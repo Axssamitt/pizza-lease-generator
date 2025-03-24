@@ -43,6 +43,15 @@ const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
                   margin-bottom: 10px;
                   text-align: justify;
                 }
+                .signature-container {
+                  margin-top: 40px;
+                  text-align: center;
+                }
+                .signature-container img {
+                  width: 200px;
+                  height: auto;
+                  margin-top: 10px;
+                }
                 @media print {
                   body {
                     padding: 0;
@@ -103,6 +112,14 @@ const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
               className="whitespace-pre-line text-sm font-mono leading-relaxed" 
               dangerouslySetInnerHTML={{ __html: contractText.replace(/\n/g, '<br>') }}
             />
+            <div className="signature-container mt-10 text-center">
+              <div className="text-2xl font-bold mb-2">JULIO'S PIZZA HOUSE</div>
+              <img 
+                src="/lovable-uploads/d8c57a49-926b-4fd9-bae2-9e73c7385732.png" 
+                alt="Assinatura" 
+                className="w-[200px] h-auto object-contain mx-auto opacity-70"
+              />
+            </div>
           </ScrollArea>
         </CardContent>
         <CardFooter className="flex justify-center border-t bg-muted/20 p-4 gap-2">
