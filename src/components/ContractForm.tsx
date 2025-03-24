@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, ArrowRightIcon, ArrowLeftIcon, UserRoundIcon, MapPinIcon, ClockIcon, UsersIcon, DollarSignIcon } from "lucide-react";
+import { CalendarIcon, ArrowRightIcon, ArrowLeftIcon, UserRoundIcon, MapPinIcon, ClockIcon, UsersIcon, DollarSignIcon, EditIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,13 +12,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 
 import { 
   ContractData, 
   defaultContractData, 
   calculateValues, 
   formatCurrency,
-  formatCpf
+  formatCpf,
+  calculateBaseWaiters
 } from "@/utils/contractGenerator";
 
 interface ContractFormProps {
@@ -37,6 +39,12 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [date, setDate] = useState<Date | undefined>();
   const [eventDate, setEventDate] = useState<Date | undefined>();
+  const [priceDialogOpen, setPriceDialogOpen] = useState(false);
+  
+  // Estados temporários para edição de preços
+  const [tempAdultPrice, setTempAdultPrice] = useState(contractData.adultPrice);
+  const [tempChildPrice, setTempChildPrice] = useState(contractData.childPrice);
+  const [tempExtraWaiterPrice, setTempExtraWaiterPrice] = useState(contractData.extraWaiterPrice);
 
   useEffect(() => {
     const updatedData = calculateValues(contractData);
@@ -46,6 +54,9 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
     contractData.adultCount, 
     contractData.childCount, 
     contractData.extraWaiters,
+    contractData.adultPrice,
+    contractData.childPrice,
+    contractData.extraWaiterPrice,
     onContractDataChange
   ]);
 
@@ -92,6 +103,36 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
     }));
   };
 
+  const handlePriceDialogOpen = () => {
+    setTempAdultPrice(contractData.adultPrice);
+    setTempChildPrice(contractData.childPrice);
+    setTempExtraWaiterPrice(contractData.extraWaiterPrice);
+    setPriceDialogOpen(true);
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const numValue = parseFloat(value) || 0;
+    
+    if (name === "adultPrice") {
+      setTempAdultPrice(numValue);
+    } else if (name === "childPrice") {
+      setTempChildPrice(numValue);
+    } else if (name === "extraWaiterPrice") {
+      setTempExtraWaiterPrice(numValue);
+    }
+  };
+
+  const savePrices = () => {
+    setContractData(prev => ({
+      ...prev,
+      adultPrice: tempAdultPrice,
+      childPrice: tempChildPrice,
+      extraWaiterPrice: tempExtraWaiterPrice
+    }));
+    setPriceDialogOpen(false);
+  };
+
   const nextStep = () => {
     if (currentStep < formSteps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -103,6 +144,8 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const baseWaiters = calculateBaseWaiters(contractData.adultCount, contractData.childCount);
 
   return (
     <motion.div 
@@ -301,6 +344,72 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-sm font-medium">Quantidades e Preços</h3>
+                <Dialog open={priceDialogOpen} onOpenChange={setPriceDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-1"
+                      onClick={handlePriceDialogOpen}
+                    >
+                      <EditIcon className="h-4 w-4" />
+                      <span>Editar Preços</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Editar Preços Unitários</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="adultPrice">Preço por Adulto (R$)</Label>
+                        <Input
+                          id="adultPrice"
+                          name="adultPrice"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={tempAdultPrice}
+                          onChange={handlePriceChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="childPrice">Preço por Criança (R$)</Label>
+                        <Input
+                          id="childPrice"
+                          name="childPrice"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={tempChildPrice}
+                          onChange={handlePriceChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="extraWaiterPrice">Preço por Garçom Extra (R$)</Label>
+                        <Input
+                          id="extraWaiterPrice"
+                          name="extraWaiterPrice"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={tempExtraWaiterPrice}
+                          onChange={handlePriceChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <DialogClose asChild>
+                        <Button variant="secondary">Cancelar</Button>
+                      </DialogClose>
+                      <Button onClick={savePrices}>Salvar Preços</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
               <div className="space-y-2">
                 <Label htmlFor="adultCount">Quantidade de Adultos</Label>
                 <div className="flex items-center">
@@ -313,7 +422,7 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
                     onChange={handleInputChange}
                   />
                   <div className="ml-2 text-xs text-muted-foreground whitespace-nowrap">
-                    R$ 55,00 cada
+                    {formatCurrency(contractData.adultPrice)} cada
                   </div>
                 </div>
               </div>
@@ -330,7 +439,7 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
                     onChange={handleInputChange}
                   />
                   <div className="ml-2 text-xs text-muted-foreground whitespace-nowrap">
-                    R$ 27,00 cada
+                    {formatCurrency(contractData.childPrice)} cada
                   </div>
                 </div>
               </div>
@@ -347,11 +456,12 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
                     onChange={handleInputChange}
                   />
                   <div className="ml-2 text-xs text-muted-foreground whitespace-nowrap">
-                    R$ 120,00 cada
+                    {formatCurrency(contractData.extraWaiterPrice)} cada
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  O evento já inclui 1 garçom. Adicione mais se necessário.
+                  O evento inclui {baseWaiters} garçom(ns) (1 a cada 30 pessoas).
+                  Adicione mais se necessário.
                 </p>
               </div>
             </motion.div>
@@ -367,20 +477,20 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
               <div className="space-y-4">
                 <div className="flex justify-between p-4 bg-secondary/50 rounded-lg">
                   <span className="font-medium">Adultos ({contractData.adultCount}x)</span>
-                  <span>{formatCurrency(contractData.adultCount * 55)}</span>
+                  <span>{formatCurrency(contractData.adultCount * contractData.adultPrice)}</span>
                 </div>
                 
                 {contractData.childCount > 0 && (
                   <div className="flex justify-between p-4 bg-secondary/50 rounded-lg">
                     <span className="font-medium">Crianças ({contractData.childCount}x)</span>
-                    <span>{formatCurrency(contractData.childCount * 27)}</span>
+                    <span>{formatCurrency(contractData.childCount * contractData.childPrice)}</span>
                   </div>
                 )}
                 
                 {contractData.extraWaiters > 0 && (
                   <div className="flex justify-between p-4 bg-secondary/50 rounded-lg">
                     <span className="font-medium">Garçons extras ({contractData.extraWaiters}x)</span>
-                    <span>{formatCurrency(contractData.extraWaiters * 120)}</span>
+                    <span>{formatCurrency(contractData.extraWaiters * contractData.extraWaiterPrice)}</span>
                   </div>
                 )}
                 

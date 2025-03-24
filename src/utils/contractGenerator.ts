@@ -17,6 +17,11 @@ export interface ContractData {
   childCount: number;
   extraWaiters: number;
   
+  // Preços
+  adultPrice: number;
+  childPrice: number;
+  extraWaiterPrice: number;
+  
   // Pagamento
   totalValue: number;
   downPayment: number;
@@ -37,6 +42,9 @@ export const defaultContractData: ContractData = {
   adultCount: 30,
   childCount: 0,
   extraWaiters: 0,
+  adultPrice: 55,
+  childPrice: 27,
+  extraWaiterPrice: 120,
   totalValue: 0,
   downPayment: 0,
   signatureDate: new Date().toLocaleDateString('pt-BR')
@@ -52,14 +60,10 @@ export const formatCurrency = (value: number): string => {
 
 // Função para calcular valores
 export const calculateValues = (data: ContractData): ContractData => {
-  const adultPrice = 55;
-  const childPrice = 27;
-  const extraWaiterPrice = 120;
-  
   const totalValue = 
-    (data.adultCount * adultPrice) + 
-    (data.childCount * childPrice) + 
-    (data.extraWaiters * extraWaiterPrice);
+    (data.adultCount * data.adultPrice) + 
+    (data.childCount * data.childPrice) + 
+    (data.extraWaiters * data.extraWaiterPrice);
   
   const downPayment = Math.round(totalValue * 0.4);
   
@@ -70,9 +74,21 @@ export const calculateValues = (data: ContractData): ContractData => {
   };
 };
 
+// Função para calcular a quantidade base de garçons (1 para cada 30 pessoas)
+export const calculateBaseWaiters = (adultCount: number, childCount: number): number => {
+  const totalGuests = adultCount + childCount;
+  return Math.max(1, Math.ceil(totalGuests / 30));
+};
+
 // Função para gerar o texto do contrato
 export const generateContractText = (data: ContractData): string => {
   const remainingPayment = data.totalValue - data.downPayment;
+  const baseWaiters = calculateBaseWaiters(data.adultCount, data.childCount);
+  const totalWaiters = baseWaiters + data.extraWaiters;
+  
+  const waitersText = data.extraWaiters > 0 
+    ? `${baseWaiters} garçons${data.extraWaiters > 0 ? ` + ${data.extraWaiters} garçons adicionais` : ''}`
+    : `${baseWaiters} garçons`;
 
   return `
 JULIO'S PIZZA HOUSE
@@ -106,12 +122,12 @@ Obs: O excedente de horário será cobrado 300,00 (trezentos reais) a cada meia 
 
 Cláusula 6ª. A CONTRATADA se compromete a fornecer o cardápio escolhido pela CONTRATANTE, cujas especificações, inclusive de quantidade a ser servida, encontram-se em documento anexo ao presente contrato. 
 
-Cláusula 7ª. A CONTRATADA fornecerá pelo menos 1 pizzaiolos e ${1 + data.extraWaiters} garçons para servir os convidados nas mesas.
+Cláusula 7ª. A CONTRATADA fornecerá pelo menos 1 pizzaiolos e ${waitersText} para servir os convidados nas mesas.
 
 Cláusula 8ª. A CONTRATADA obriga-se a manter todos os seus empregados devidamente uniformizados durante a prestação dos serviços ora contratados, garantindo que todos eles possuem os requisitos de urbanidade, moralidade e educação. 
 
 DO PREÇO E DAS CONDIÇÕES DE PAGAMENTO 
-Cláusula 9. O serviço contratado no presente instrumento será remunerado dependendo do numero de pessoas confirmadas uma semana antes do evento. A contratada garante que a quantidade de comida seja suficiente para atender o num de pessoas presentes, estando preparada para atender até 10% a mais do numero de pessoas confirmadas, cobrando o valor de R$ 55,00 por adulto e R$ 27,00 por crianças no total de ${formatCurrency(data.totalValue)} assim como combinado pelo telefone. O serviço deve ser pago em dinheiro, com uma entrada de ${formatCurrency(data.downPayment)} (depositados em conta, caixa econômica Ag: 1479 conta: 00028090-5 conta corrente) ANTECIPADO, a diferença no ato da festa no valor de ${formatCurrency(remainingPayment)}.
+Cláusula 9. O serviço contratado no presente instrumento será remunerado dependendo do numero de pessoas confirmadas uma semana antes do evento. A contratada garante que a quantidade de comida seja suficiente para atender o num de pessoas presentes, estando preparada para atender até 10% a mais do numero de pessoas confirmadas, cobrando o valor de R$ ${data.adultPrice.toFixed(2)} por adulto e R$ ${data.childPrice.toFixed(2)} por crianças no total de ${formatCurrency(data.totalValue)} assim como combinado pelo telefone. O serviço deve ser pago em dinheiro, com uma entrada de ${formatCurrency(data.downPayment)} (depositados em conta, caixa econômica Ag: 1479 conta: 00028090-5 conta corrente) ANTECIPADO, a diferença no ato da festa no valor de ${formatCurrency(remainingPayment)}.
 
 Cláusula 10. O presente contrato poderá ser rescindido unilateralmente por qualquer uma das partes, desde que haja comunicação formal por escrito justificando o motivo. Deverá acontecer, além disso, até 10 dias corridos, antes da data prevista para o evento, com devolução da entrada. Caso o cliente queira ou precise cancelar ou mudar a data da reserva, após ter pago a entrada, a contratada descontará o valor pago na futura contratação do serviço se acontecer nos primeiros 30 dias corridos após o dia antecipadamente reservado. 
 
