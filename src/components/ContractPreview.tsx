@@ -1,11 +1,13 @@
 
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
-import { PrinterIcon } from "lucide-react";
+import { PrinterIcon, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ContractData, generateContractText } from "@/utils/contractGenerator";
+import { saveContract } from "@/utils/storageUtils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ContractPreviewProps {
   contractData: ContractData;
@@ -14,6 +16,7 @@ interface ContractPreviewProps {
 const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
   const contractRef = useRef<HTMLDivElement>(null);
   const contractText = generateContractText(contractData);
+  const { toast } = useToast();
 
   const handlePrint = () => {
     if (contractRef.current) {
@@ -65,6 +68,23 @@ const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
     }
   };
 
+  const handleSaveContract = () => {
+    try {
+      saveContract(contractData);
+      toast({
+        title: "Contrato salvo",
+        description: "O contrato foi salvo com sucesso no histórico.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar o contrato.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <motion.div
       className="w-full max-w-3xl mx-auto"
@@ -85,10 +105,14 @@ const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
             />
           </ScrollArea>
         </CardContent>
-        <CardFooter className="flex justify-center border-t bg-muted/20 p-4">
+        <CardFooter className="flex justify-center border-t bg-muted/20 p-4 gap-2">
           <Button onClick={handlePrint} className="min-w-[200px]">
             <PrinterIcon className="mr-2 h-4 w-4" />
             Imprimir / Salvar PDF
+          </Button>
+          <Button onClick={handleSaveContract} variant="outline" className="min-w-[200px]">
+            <Save className="mr-2 h-4 w-4" />
+            Salvar Contrato
           </Button>
         </CardFooter>
       </Card>

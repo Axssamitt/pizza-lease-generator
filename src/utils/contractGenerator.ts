@@ -36,7 +36,7 @@ export const defaultContractData: ContractData = {
   eventAddress: "",
   eventStartTime: "20:30",
   eventEndTime: "23:30", // 3 horas após o início (por padrão)
-  adultCount: 25, // Alterado de 30 para 25, conforme solicitado
+  adultCount: 25, // Por padrão
   childCount: 0,
   extraWaiters: 0,
   adultPrice: 55,
@@ -63,8 +63,16 @@ export const calculateValues = (data: ContractData): ContractData => {
   
   const downPayment = Math.round(totalValue * 0.4);
   
+  // Calcular hora de término (3 horas após o início)
+  const [startHour, startMinute] = data.eventStartTime.split(':').map(Number);
+  const endDate = new Date();
+  endDate.setHours(startHour, startMinute, 0);
+  endDate.setHours(endDate.getHours() + 3);
+  const endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+  
   return {
     ...data,
+    eventEndTime: endTime,
     totalValue,
     downPayment
   };
@@ -98,7 +106,7 @@ export const generateContractText = (data: ContractData): string => {
 
   // Texto sobre garçons extras para a cláusula 9
   const extraWaitersText = data.extraWaiters > 0
-    ? `, mais ${data.extraWaiters} garçons adicionais no valor de ${formatCurrency(data.extraWaiterPrice)} cada`
+    ? `, mais ${data.extraWaiters} garçons adicionais no valor de ${formatCurrency(data.extraWaiterPrice)} cada (total de ${formatCurrency(data.extraWaiters * data.extraWaiterPrice)})`
     : '';
 
   const currentDate = new Date().toLocaleDateString('pt-BR');
