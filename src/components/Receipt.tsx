@@ -164,7 +164,7 @@ const Receipt: React.FC<ReceiptProps> = ({ contractData }) => {
             <div className="flex flex-col items-center mt-8 mb-2">
               <div className="text-2xl font-bold mb-4">JULIO'S PIZZA HOUSE</div>
               <img 
-                src="/lovable-uploads/212f29be-bd28-418c-9bd9-290db432f429.png" 
+                src="/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" 
                 alt="Assinatura" 
                 className="w-[150px] h-auto object-contain opacity-60 mb-2"
               />

@@ -115,7 +115,7 @@ const ContractPreview: React.FC<ContractPreviewProps> = ({ contractData }) => {
             <div className="signature-container mt-10 text-center">
               <div className="text-2xl font-bold mb-2">JULIO'S PIZZA HOUSE</div>
               <img 
-                src="/lovable-uploads/d8c57a49-926b-4fd9-bae2-9e73c7385732.png" 
+                src="/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" 
                 alt="Assinatura" 
                 className="w-[200px] h-auto object-contain mx-auto opacity-70"
               />
