@@ -22,6 +22,7 @@ import { Eye, Trash2, ArrowLeft, FileText } from "lucide-react";
 import { StoredContract, getContracts, deleteContract } from "@/utils/storageUtils";
 import { formatCurrency } from "@/utils/contractGenerator";
 import { useToast } from "@/hooks/use-toast";
+import FileOperations from "@/components/FileOperations";
 
 const History = () => {
   const [contracts, setContracts] = useState<StoredContract[]>([]);
@@ -80,77 +81,112 @@ const History = () => {
           </Button>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Contratos Salvos</CardTitle>
-            <CardDescription>
-              Lista de todos os contratos gerados e salvos localmente.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {contracts.length === 0 ? (
-              <div className="text-center py-10 text-muted-foreground">
-                <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
-                <p>Nenhum contrato encontrado.</p>
-                <Button variant="outline" className="mt-4" asChild>
-                  <Link to="/">Criar um novo contrato</Link>
-                </Button>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Cliente</TableHead>
-                      <TableHead>Data do Evento</TableHead>
-                      <TableHead>Valor Total</TableHead>
-                      <TableHead>Convidados</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {contracts.map((contract) => (
-                      <TableRow key={contract.id}>
-                        <TableCell className="font-mono text-xs">
-                          {formatDate(contract.createdAt)}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {contract.clientName}
-                        </TableCell>
-                        <TableCell>{contract.eventDate}</TableCell>
-                        <TableCell>{formatCurrency(contract.totalValue)}</TableCell>
-                        <TableCell>
-                          {contract.adultCount} adultos
-                          {contract.childCount > 0 && `, ${contract.childCount} crianças`}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button variant="outline" size="icon" asChild>
-                              <Link to={`/contract/${contract.id}`}>
-                                <Eye className="h-4 w-4" />
-                                <span className="sr-only">Ver</span>
-                              </Link>
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              onClick={() => handleDeleteContract(contract.id)}
-                              className="text-destructive hover:bg-destructive/10"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">Excluir</span>
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Contratos Salvos</CardTitle>
+                <CardDescription>
+                  Lista de todos os contratos gerados e salvos.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {contracts.length === 0 ? (
+                  <div className="text-center py-10 text-muted-foreground">
+                    <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
+                    <p>Nenhum contrato encontrado.</p>
+                    <Button variant="outline" className="mt-4" asChild>
+                      <Link to="/">Criar um novo contrato</Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Cliente</TableHead>
+                          <TableHead>Data do Evento</TableHead>
+                          <TableHead>Valor Total</TableHead>
+                          <TableHead>Convidados</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {contracts.map((contract) => (
+                          <TableRow key={contract.id}>
+                            <TableCell className="font-mono text-xs">
+                              {formatDate(contract.createdAt)}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {contract.clientName}
+                            </TableCell>
+                            <TableCell>{contract.eventDate}</TableCell>
+                            <TableCell>{formatCurrency(contract.totalValue)}</TableCell>
+                            <TableCell>
+                              {contract.adultCount} adultos
+                              {contract.childCount > 0 && `, ${contract.childCount} crianças`}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button variant="outline" size="icon" asChild>
+                                  <Link to={`/contract/${contract.id}`}>
+                                    <Eye className="h-4 w-4" />
+                                    <span className="sr-only">Ver</span>
+                                  </Link>
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="icon" 
+                                  onClick={() => handleDeleteContract(contract.id)}
+                                  className="text-destructive hover:bg-destructive/10"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  <span className="sr-only">Excluir</span>
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div>
+            <FileOperations onContractsUpdated={loadContracts} />
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>Instruções</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 text-sm">
+                  <div>
+                    <h3 className="font-semibold">Uso Local</h3>
+                    <p className="text-muted-foreground">
+                      Para uso em computador pessoal, exporte como HTML e abra o arquivo no navegador.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Google Drive</h3>
+                    <p className="text-muted-foreground">
+                      Faça upload do arquivo HTML para o Google Drive e abra com o navegador integrado.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Backup de Dados</h3>
+                    <p className="text-muted-foreground">
+                      Baixe regularmente o arquivo JSON para guardar seus contratos com segurança.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

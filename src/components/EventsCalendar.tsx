@@ -30,7 +30,7 @@ const EventsCalendar: React.FC<EventsCalendarProps> = ({ contractData }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState<Event[]>([]);
 
-  // Carregar eventos do localStorage
+  // Carregar eventos da memória
   useEffect(() => {
     const storedContracts = getContracts();
     
