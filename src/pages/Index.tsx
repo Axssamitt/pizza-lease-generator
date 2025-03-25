@@ -9,15 +9,27 @@ import EventsCalendar from "@/components/EventsCalendar";
 import { defaultContractData, ContractData, calculateValues } from "@/utils/contractGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { History, Save, Download } from "lucide-react";
+import { History, Save, Download, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { exportAsStandaloneHtml } from "@/utils/storageUtils";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [contractData, setContractData] = useState<ContractData>(defaultContractData);
+  const { toast } = useToast();
   
   const handleContractDataChange = (data: ContractData) => {
     const calculatedData = calculateValues(data);
     setContractData(calculatedData);
+  };
+  
+  const handleExportHtml = () => {
+    exportAsStandaloneHtml();
+    toast({
+      title: "HTML exportado",
+      description: "Página HTML completa gerada para uso offline ou no Google Drive.",
+      variant: "default",
+    });
   };
   
   return (
@@ -35,12 +47,17 @@ const Index = () => {
           Gerador de Contratos para Eventos de Pizza
         </p>
         
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
           <Button variant="outline" asChild>
             <Link to="/history">
               <History className="mr-2 h-4 w-4" />
               Histórico de Contratos
             </Link>
+          </Button>
+          
+          <Button variant="outline" onClick={handleExportHtml}>
+            <FileText className="mr-2 h-4 w-4" />
+            Exportar como Página HTML
           </Button>
         </div>
         
