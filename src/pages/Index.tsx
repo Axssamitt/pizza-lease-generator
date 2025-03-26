@@ -9,7 +9,8 @@ import EventsCalendar from "@/components/EventsCalendar";
 import { defaultContractData, ContractData, calculateValues } from "@/utils/contractGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { History } from "lucide-react";
+import { History, Save, Download } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
   const [contractData, setContractData] = useState<ContractData>(defaultContractData);
@@ -42,6 +43,13 @@ const Index = () => {
             </Link>
           </Button>
         </div>
+        
+        <Alert className="mt-4 bg-muted/50 border-0">
+          <AlertDescription className="text-xs text-muted-foreground">
+            Novo! Exporte seus contratos como arquivo HTML para uso local ou no Google Drive.
+            Acesse o <Link to="/history" className="font-medium underline">Histórico</Link> para gerenciar seus arquivos.
+          </AlertDescription>
+        </Alert>
       </motion.div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">

@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { ContractData } from "@/utils/contractGenerator";
-import { getStoredContracts } from "@/utils/storageUtils";
+import { getContracts } from "@/utils/storageUtils";
 
 interface Event {
   id: string;
@@ -30,17 +30,17 @@ const EventsCalendar: React.FC<EventsCalendarProps> = ({ contractData }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState<Event[]>([]);
 
-  // Carregar eventos do localStorage
+  // Carregar eventos da memória
   useEffect(() => {
-    const storedContracts = getStoredContracts();
+    const storedContracts = getContracts();
     
     const mappedEvents = storedContracts.map((contract) => ({
       id: contract.id,
       title: contract.clientName,
       date: parseISO(contract.eventDate),
-      time: contract.eventTime,
-      location: contract.eventLocation,
-      guestCount: contract.guestCount
+      time: contract.eventStartTime,
+      location: contract.eventAddress,
+      guestCount: contract.adultCount + (contract.childCount || 0)
     }));
     
     setEvents(mappedEvents);
