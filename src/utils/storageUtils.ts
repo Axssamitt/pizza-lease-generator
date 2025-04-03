@@ -42,6 +42,31 @@ export const saveContract = (contract: ContractData): StoredContract => {
   return newContract;
 };
 
+// Download contracts as a JSON file
+export const downloadContractsJson = () => {
+  try {
+    const contractsJson = JSON.stringify(contractsInMemory, null, 2);
+    const blob = new Blob([contractsJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'contratos_pizzas.json';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+    
+    console.log('Contracts JSON downloaded successfully');
+  } catch (error) {
+    console.error('Error downloading contracts JSON:', error);
+  }
+};
+
 // Save contracts to a local JSON file
 const saveContractsToFile = () => {
   try {
