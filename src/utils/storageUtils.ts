@@ -24,7 +24,7 @@ export const initializeContracts = (contractsJson?: string) => {
   return contractsInMemory;
 };
 
-// Save contract to memory and return a downloadable JSON
+// Save contract to memory and local JSON file
 export const saveContract = (contract: ContractData): StoredContract => {
   // Create a new contract with ID and timestamp
   const newContract: StoredContract = {
@@ -36,10 +36,35 @@ export const saveContract = (contract: ContractData): StoredContract => {
   // Add to beginning of array (newest first)
   contractsInMemory.unshift(newContract);
   
-  // Trigger a download of the updated contracts JSON
-  downloadContractsJson();
+  // Save to local JSON file in the same directory as index.html
+  saveContractsToFile();
   
   return newContract;
+};
+
+// Save contracts to a local JSON file
+const saveContractsToFile = () => {
+  try {
+    const contractsJson = JSON.stringify(contractsInMemory, null, 2);
+    const blob = new Blob([contractsJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'contratos_pizzas.json';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+    
+    console.log('Contracts saved to file successfully');
+  } catch (error) {
+    console.error('Error saving contracts to file:', error);
+  }
 };
 
 // Get all contracts from memory
@@ -61,8 +86,8 @@ export const deleteContract = (id: string): boolean => {
     return false; // No contract was deleted
   }
   
-  // Trigger a download of the updated contracts JSON
-  downloadContractsJson();
+  // Save updated contracts to file
+  saveContractsToFile();
   return true;
 };
 
@@ -70,25 +95,6 @@ export const deleteContract = (id: string): boolean => {
 export const getContractById = (id: string): StoredContract | null => {
   const contract = contractsInMemory.find(c => c.id === id);
   return contract || null;
-};
-
-// Download the contracts as a JSON file
-export const downloadContractsJson = () => {
-  const contractsJson = JSON.stringify(contractsInMemory, null, 2);
-  const blob = new Blob([contractsJson], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'contratos_pizzas.json';
-  document.body.appendChild(a);
-  a.click();
-  
-  // Clean up
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 100);
 };
 
 // Upload contracts from a JSON file
@@ -100,6 +106,7 @@ export const uploadContractsJson = (file: File): Promise<StoredContract[]> => {
       try {
         const json = event.target?.result as string;
         contractsInMemory = JSON.parse(json);
+        saveContractsToFile(); // Save the imported contracts to file
         resolve(contractsInMemory);
       } catch (error) {
         reject(error);

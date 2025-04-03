@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import ContractForm from "@/components/ContractForm";
 import ContractPreview from "@/components/ContractPreview";
 import Receipt from "@/components/Receipt";
-import EventsCalendar from "@/components/EventsCalendar";
 import { defaultContractData, ContractData, calculateValues } from "@/utils/contractGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -56,10 +55,9 @@ const Index = () => {
         <ContractForm onContractDataChange={handleContractDataChange} />
         
         <Tabs defaultValue="contract" className="space-y-4">
-          <TabsList className="grid w-full md:w-[400px] grid-cols-3">
+          <TabsList className="grid w-full md:w-[400px] grid-cols-2">
             <TabsTrigger value="contract">Contrato</TabsTrigger>
             <TabsTrigger value="receipt">Recibo</TabsTrigger>
-            <TabsTrigger value="calendar">Agenda</TabsTrigger>
           </TabsList>
           
           <TabsContent value="contract" className="space-y-4">
@@ -68,10 +66,6 @@ const Index = () => {
           
           <TabsContent value="receipt" className="space-y-4">
             <Receipt contractData={contractData} />
-          </TabsContent>
-          
-          <TabsContent value="calendar" className="space-y-4">
-            <EventsCalendar contractData={contractData} />
           </TabsContent>
         </Tabs>
       </div>
