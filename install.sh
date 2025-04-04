@@ -4,49 +4,24 @@
 echo "=== Iniciando instalação do Gerador de Contratos Julio's Pizza House ==="
 echo ""
 
-# Check if git is installed
-if ! command -v git &> /dev/null; then
-    echo "Git não está instalado. Por favor, instale o Git primeiro."
-    exit 1
-fi
+# Create directory
+echo "Criando diretório..."
+mkdir -p julio_pizza_house
+cd julio_pizza_house
 
-# Check if npm is installed
-if ! command -v npm &> /dev/null; then
-    echo "NPM não está instalado. Por favor, instale o Node.js e NPM primeiro."
-    exit 1
-fi
+# Download files
+echo "Baixando arquivos..."
+curl -O https://raw.githubusercontent.com/Axssamit/jphcontract/main/index.html
+curl -O https://raw.githubusercontent.com/Axssamit/jphcontract/main/styles.css
+curl -O https://raw.githubusercontent.com/Axssamit/jphcontract/main/script.js
 
-# Clone the repository
-echo "Baixando o repositório do Git..."
-git clone https://github.com/seu-usuario/Axssamit/jphcontract.git
-cd jphcontract
-
-# Install dependencies
-echo "Instalando dependências..."
-npm install
-
-# Build the application
-echo "Compilando a aplicação..."
-npm run build
-
-# Start the application
-echo "Iniciando a aplicação..."
-npm run preview
-
-# Get the local IP address
-if command -v hostname &> /dev/null; then
-    IP=$(hostname -I | awk '{print $1}')
-    echo ""
-    echo "=== Instalação concluída! ==="
-    echo "A aplicação está rodando em:"
-    echo "- Local: http://localhost:4173"
-    if [ ! -z "$IP" ]; then
-        echo "- Rede: http://$IP:4173"
-    fi
-else
-    echo ""
-    echo "=== Instalação concluída! ==="
-    echo "A aplicação está rodando em http://localhost:4173"
-fi
-
-echo "Pressione Ctrl+C para encerrar quando terminar de usar."
+echo ""
+echo "=== Instalação concluída! ==="
+echo ""
+echo "Abra o arquivo index.html no seu navegador para usar o aplicativo."
+echo "Os contratos serão salvos automaticamente no seu navegador."
+echo ""
+echo "Para abrir o aplicativo, digite:"
+echo "   $ open index.html   # (macOS)"
+echo "   $ xdg-open index.html   # (Linux)"
+echo "   # No Windows, simplesmente clique duas vezes no arquivo index.html"

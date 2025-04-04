@@ -1,26 +1,166 @@
+
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pizza-lease-generator</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Julio's Pizza House - Gerador de Contratos</title>
+  <meta name="description" content="Gerador de Contratos para Eventos de Pizza">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Julio's Pizza House</h1>
+      <p>Gerador de Contratos para Eventos de Pizza</p>
+    </header>
 
-    <meta property="og:title" content="Lovable Generated Project" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <main>
+      <div class="actions">
+        <button id="viewHistory">Ver Histórico de Contratos</button>
+      </div>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+      <div class="grid">
+        <div class="contract-form">
+          <h2>Novo Contrato</h2>
+          <form id="contractForm">
+            <fieldset>
+              <legend>Cliente</legend>
+              <div class="form-group">
+                <label for="clientName">Nome do Cliente:</label>
+                <input type="text" id="clientName" required>
+              </div>
+              <div class="form-group">
+                <label for="clientDoc">CPF/CNPJ:</label>
+                <input type="text" id="clientDoc" required>
+              </div>
+              <div class="form-group">
+                <label for="clientRg">RG:</label>
+                <input type="text" id="clientRg" required>
+              </div>
+              <div class="form-group">
+                <label for="clientAddress">Endereço:</label>
+                <input type="text" id="clientAddress" required>
+              </div>
+            </fieldset>
 
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+            <fieldset>
+              <legend>Evento</legend>
+              <div class="form-group">
+                <label for="eventDate">Data do Evento:</label>
+                <input type="date" id="eventDate" required>
+              </div>
+              <div class="form-group">
+                <label for="eventAddress">Local do Evento:</label>
+                <input type="text" id="eventAddress" required>
+              </div>
+              <div class="form-group">
+                <label for="eventStartTime">Hora de Início:</label>
+                <input type="time" id="eventStartTime" value="20:30" required>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Detalhes do Serviço</legend>
+              <div class="form-group">
+                <label for="adultCount">Quantidade de Adultos:</label>
+                <input type="number" id="adultCount" value="25" min="1" required>
+              </div>
+              <div class="form-group">
+                <label for="childCount">Quantidade de Crianças:</label>
+                <input type="number" id="childCount" value="0" min="0">
+              </div>
+              <div class="form-group">
+                <label for="extraWaiters">Garçons Adicionais:</label>
+                <input type="number" id="extraWaiters" value="0" min="0">
+              </div>
+              <div class="form-group">
+                <label for="adultPrice">Valor por Adulto (R$):</label>
+                <input type="number" id="adultPrice" value="55" min="1" required>
+              </div>
+              <div class="form-group">
+                <label for="childPrice">Valor por Criança (R$):</label>
+                <input type="number" id="childPrice" value="27.50" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="extraWaiterPrice">Valor por Garçom Adicional (R$):</label>
+                <input type="number" id="extraWaiterPrice" value="120" min="0" required>
+              </div>
+            </fieldset>
+
+            <div class="form-actions">
+              <button type="submit">Gerar Contrato</button>
+              <button type="button" id="saveContract">Salvar Contrato</button>
+              <button type="reset">Limpar Campos</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="contract-preview">
+          <div class="tabs">
+            <button class="tab active" data-tab="contract">Contrato</button>
+            <button class="tab" data-tab="receipt">Recibo</button>
+          </div>
+          
+          <div class="tab-content active" id="contract-tab">
+            <div class="print-actions">
+              <button id="printContract">Imprimir Contrato</button>
+            </div>
+            <div class="preview-container" id="contractPreview">
+              <p>Preencha o formulário para gerar o contrato.</p>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="receipt-tab">
+            <div class="print-actions">
+              <button id="printReceipt">Imprimir Recibo</button>
+            </div>
+            <div class="preview-container" id="receiptPreview">
+              <p>Preencha o formulário para gerar o recibo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="historyModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Histórico de Contratos</h2>
+          <button class="close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="history-actions">
+            <button id="exportContracts">Exportar Contratos</button>
+            <input type="file" id="importContracts" accept=".json" style="display: none;">
+            <button id="importContractsBtn">Importar Contratos</button>
+          </div>
+          <table id="contractsTable">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>Data do Evento</th>
+                <th>Valor Total</th>
+                <th>Convidados</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="contractsTableBody">
+              <tr>
+                <td colspan="6" class="empty-message">Nenhum contrato encontrado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; <span id="current-year"></span> Julio's Pizza House. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>

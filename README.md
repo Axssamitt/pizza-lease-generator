@@ -1,23 +1,34 @@
 
 # Julio's Pizza House - Gerador de Contratos
 
-Uma aplicação web para gerar contratos de eventos de pizza para a Julio's Pizza House.
+Uma aplicação web simples para gerar contratos de eventos de pizza para a Julio's Pizza House.
 
 ## Funcionalidades
 
 - Criação de contratos personalizados para eventos
 - Geração de recibos
-- Histórico de contratos salvos automaticamente
+- Histórico de contratos salvos automaticamente no navegador
 - Exportação e importação de contratos em formato JSON
 
 ## Requisitos
 
-- Node.js 16+ e npm
-- Navegador moderno (Chrome, Firefox, Edge, Safari)
+- Apenas um navegador web moderno (Chrome, Firefox, Edge, Safari)
+- Não requer Node.js, npm ou qualquer outra instalação
 
-## Instalação Rápida
+## Instalação
 
-### Método 1: Script Automático
+### Método 1: Baixar diretamente
+
+1. Baixe os arquivos:
+   - [index.html](https://raw.githubusercontent.com/Axssamit/jphcontract/main/index.html)
+   - [styles.css](https://raw.githubusercontent.com/Axssamit/jphcontract/main/styles.css)
+   - [script.js](https://raw.githubusercontent.com/Axssamit/jphcontract/main/script.js)
+
+2. Salve todos os arquivos na mesma pasta
+
+3. Abra o arquivo `index.html` no seu navegador
+
+### Método 2: Script de Instalação (Linux/macOS)
 
 No Linux ou macOS, execute:
 
@@ -27,37 +38,29 @@ chmod +x install.sh
 ./install.sh
 ```
 
-### Método 2: Instalação Manual
+## Uso
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/Axssamit/jphcontract.git
-   cd jpphcontract
-   ```
+1. Preencha o formulário com os dados do cliente e do evento
+2. O contrato e o recibo serão gerados automaticamente
+3. Use os botões para imprimir o contrato ou o recibo
+4. Clique em "Salvar Contrato" para adicionar o contrato ao histórico
+5. Acesse o histórico clicando em "Ver Histórico de Contratos"
 
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
+## Armazenamento de Dados
 
-3. Execute a aplicação:
-   ```bash
-   npm run dev
-   ```
+- Os contratos são salvos automaticamente no armazenamento local do navegador (localStorage)
+- Nenhum dado é enviado para servidores externos
+- Faça backup regularmente usando a função "Exportar Contratos"
 
-4. Acesse a aplicação em seu navegador:
-   ```
-   http://localhost:5173
-   ```
+## Personalização
 
-## Desenvolvimento
+Se precisar personalizar o aplicativo:
 
-- Para iniciar o servidor de desenvolvimento:
-  ```bash
-  npm run dev
-  ```
+1. Edite o arquivo `styles.css` para alterar a aparência
+2. Modifique o arquivo `script.js` para alterar a funcionalidade
+3. Atualize o arquivo `index.html` para mudar a estrutura
 
-- Para compilar para produção:
-  ```bash
-  npm run build
-  ```
+## Suporte
+
+Para suporte ou dúvidas, entre em contato com o desenvolvedor.
+
