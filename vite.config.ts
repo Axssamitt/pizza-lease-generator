@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
-  base: "/gpt-page/",
+  base: "/jphcontract/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
