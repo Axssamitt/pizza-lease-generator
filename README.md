@@ -1,69 +1,71 @@
-# Welcome to your Lovable project
 
-## Project info
+# Julio's Pizza House - Gerador de Contratos
 
-**URL**: https://lovable.dev/projects/f2513e5a-c16f-4722-8a60-4bc5471a8cdd
+Uma aplicação web para gerar contratos de eventos de pizza para a Julio's Pizza House.
 
-## How can I edit this code?
+## Funcionalidades
 
-There are several ways of editing your application.
+- Criação de contratos personalizados para eventos
+- Geração de recibos
+- Histórico de contratos salvos automaticamente
+- Exportação e importação de contratos em formato JSON
 
-**Use Lovable**
+## Requisitos
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f2513e5a-c16f-4722-8a60-4bc5471a8cdd) and start prompting.
+- Node.js 16+ e npm
+- Navegador moderno (Chrome, Firefox, Edge, Safari)
 
-Changes made via Lovable will be committed automatically to this repo.
+## Instalação Rápida
 
-**Use your preferred IDE**
+### Método 1: Script Automático
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+No Linux ou macOS, execute:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+curl -o install.sh https://raw.githubusercontent.com/seu-usuario/pizza-lease-generator/main/install.sh
+chmod +x install.sh
+./install.sh
 ```
 
-**Edit a file directly in GitHub**
+### Método 2: Instalação Manual
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/pizza-lease-generator.git
+   cd pizza-lease-generator
+   ```
 
-**Use GitHub Codespaces**
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+3. Execute a aplicação:
+   ```bash
+   npm run dev
+   ```
 
-## What technologies are used for this project?
+4. Acesse a aplicação em seu navegador:
+   ```
+   http://localhost:5173
+   ```
 
-This project is built with .
+## Desenvolvimento
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Para iniciar o servidor de desenvolvimento:
+  ```bash
+  npm run dev
+  ```
 
-## How can I deploy this project?
+- Para compilar para produção:
+  ```bash
+  npm run build
+  ```
 
-Simply open [Lovable](https://lovable.dev/projects/f2513e5a-c16f-4722-8a60-4bc5471a8cdd) and click on Share -> Publish.
+## Suporte e Contribuições
 
-## I want to use a custom domain - is that possible?
+Para reportar bugs ou sugerir melhorias, crie uma issue no repositório do GitHub.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Licença
+
+Este projeto está licenciado sob a licença MIT.

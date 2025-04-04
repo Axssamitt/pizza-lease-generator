@@ -8,7 +8,7 @@ import Receipt from "@/components/Receipt";
 import { defaultContractData, ContractData, calculateValues } from "@/utils/contractGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { History, Save, Download } from "lucide-react";
+import { History } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
@@ -45,8 +45,8 @@ const Index = () => {
         
         <Alert className="mt-4 bg-muted/50 border-0">
           <AlertDescription className="text-xs text-muted-foreground">
-            Novo! Exporte seus contratos como arquivo HTML para uso local ou no Google Drive.
-            Acesse o <Link to="/history" className="font-medium underline">Histórico</Link> para gerenciar seus arquivos.
+            Os contratos são salvos automaticamente no navegador.
+            Acesse o <Link to="/history" className="font-medium underline">Histórico</Link> para gerenciar seus contratos.
           </AlertDescription>
         </Alert>
       </motion.div>

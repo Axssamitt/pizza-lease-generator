@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { 
   Download, 
   Upload, 
-  FileText, 
   FilePlus2 
 } from "lucide-react";
 import { 
@@ -16,8 +15,7 @@ import {
 } from "@/components/ui/card";
 import { 
   downloadContractsJson, 
-  uploadContractsJson, 
-  exportAsStandaloneHtml 
+  uploadContractsJson 
 } from '@/utils/storageUtils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -64,20 +62,13 @@ const FileOperations: React.FC<FileOperationsProps> = ({ onContractsUpdated }) =
     });
   };
 
-  const handleExportHtml = () => {
-    exportAsStandaloneHtml();
-    toast({
-      title: "HTML exportado",
-      description: "Página HTML completa gerada para uso offline.",
-      variant: "default",
-    });
-  };
-
   const handleNewFile = () => {
     if (window.confirm("Isso criará um novo arquivo e removerá todos os contratos atuais da memória. Deseja continuar?")) {
-      // Clear contracts in memory by initializing with empty array
-      window.PRELOADED_CONTRACTS = [];
-      onContractsUpdated();
+      // Clear localStorage
+      localStorage.removeItem('contracts');
+      // Reload page to reset application state
+      window.location.reload();
+      
       toast({
         title: "Novo arquivo criado",
         description: "Um novo arquivo de contratos foi iniciado.",
@@ -91,7 +82,7 @@ const FileOperations: React.FC<FileOperationsProps> = ({ onContractsUpdated }) =
       <CardHeader>
         <CardTitle>Operações de Arquivo</CardTitle>
         <CardDescription>
-          Gerencie seus arquivos de contratos para uso local ou online
+          Gerencie seus arquivos de contratos
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -123,25 +114,14 @@ const FileOperations: React.FC<FileOperationsProps> = ({ onContractsUpdated }) =
             </Button>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleExportHtml}
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Exportar HTML
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleNewFile}
-            >
-              <FilePlus2 className="mr-2 h-4 w-4" />
-              Novo Arquivo
-            </Button>
-          </div>
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={handleNewFile}
+          >
+            <FilePlus2 className="mr-2 h-4 w-4" />
+            Novo Arquivo
+          </Button>
         </div>
       </CardContent>
     </Card>

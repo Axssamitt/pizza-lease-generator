@@ -10,21 +10,23 @@ export interface StoredContract extends ContractData {
 // In-memory contracts container that will be used for the current session
 let contractsInMemory: StoredContract[] = [];
 
-// Initialize contracts from a local file or empty array
-export const initializeContracts = (contractsJson?: string) => {
-  if (contractsJson) {
-    try {
-      contractsInMemory = JSON.parse(contractsJson);
-      console.log('Contracts loaded from JSON:', contractsInMemory.length);
-    } catch (error) {
-      console.error('Error parsing contracts from JSON:', error);
-      contractsInMemory = [];
+// Initialize contracts from localStorage
+export const initializeContracts = () => {
+  try {
+    const storedContracts = localStorage.getItem('contracts');
+    if (storedContracts) {
+      contractsInMemory = JSON.parse(storedContracts);
+      console.log('Contracts loaded from localStorage:', contractsInMemory.length);
     }
+  } catch (error) {
+    console.error('Error loading contracts from localStorage:', error);
+    contractsInMemory = [];
   }
+  
   return contractsInMemory;
 };
 
-// Save contract to memory and local JSON file
+// Save contract to memory and localStorage
 export const saveContract = (contract: ContractData): StoredContract => {
   // Create a new contract with ID and timestamp
   const newContract: StoredContract = {
@@ -36,8 +38,8 @@ export const saveContract = (contract: ContractData): StoredContract => {
   // Add to beginning of array (newest first)
   contractsInMemory.unshift(newContract);
   
-  // Save to local JSON file in the same directory as index.html
-  saveContractsToFile();
+  // Save to localStorage
+  saveContractsToStorage();
   
   return newContract;
 };
@@ -67,28 +69,13 @@ export const downloadContractsJson = () => {
   }
 };
 
-// Save contracts to a local JSON file
-const saveContractsToFile = () => {
+// Save contracts to localStorage
+const saveContractsToStorage = () => {
   try {
-    const contractsJson = JSON.stringify(contractsInMemory, null, 2);
-    const blob = new Blob([contractsJson], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'contratos_pizzas.json';
-    document.body.appendChild(a);
-    a.click();
-    
-    // Clean up
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 100);
-    
-    console.log('Contracts saved to file successfully');
+    localStorage.setItem('contracts', JSON.stringify(contractsInMemory));
+    console.log('Contracts saved to localStorage successfully');
   } catch (error) {
-    console.error('Error saving contracts to file:', error);
+    console.error('Error saving contracts to localStorage:', error);
   }
 };
 
@@ -111,8 +98,8 @@ export const deleteContract = (id: string): boolean => {
     return false; // No contract was deleted
   }
   
-  // Save updated contracts to file
-  saveContractsToFile();
+  // Save updated contracts to localStorage
+  saveContractsToStorage();
   return true;
 };
 
@@ -131,7 +118,7 @@ export const uploadContractsJson = (file: File): Promise<StoredContract[]> => {
       try {
         const json = event.target?.result as string;
         contractsInMemory = JSON.parse(json);
-        saveContractsToFile(); // Save the imported contracts to file
+        saveContractsToStorage(); // Save the imported contracts to localStorage
         resolve(contractsInMemory);
       } catch (error) {
         reject(error);
@@ -144,39 +131,4 @@ export const uploadContractsJson = (file: File): Promise<StoredContract[]> => {
     
     reader.readAsText(file);
   });
-};
-
-// Export contracts data to create a self-contained HTML file
-export const exportAsStandaloneHtml = () => {
-  // Fetch the current HTML content
-  fetch(window.location.href)
-    .then(response => response.text())
-    .then(html => {
-      // Inject the contracts data into the HTML
-      const contractsDataScript = `<script>
-        window.PRELOADED_CONTRACTS = ${JSON.stringify(contractsInMemory)};
-      </script>`;
-      
-      // Insert the script before the closing body tag
-      const modifiedHtml = html.replace('</body>', `${contractsDataScript}\n</body>`);
-      
-      // Create a download link
-      const blob = new Blob([modifiedHtml], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'contratos_pizzas.html';
-      document.body.appendChild(a);
-      a.click();
-      
-      // Clean up
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 100);
-    })
-    .catch(error => {
-      console.error('Error exporting standalone HTML:', error);
-    });
 };

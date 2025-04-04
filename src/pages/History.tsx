@@ -167,19 +167,19 @@ const History = () => {
                   <div>
                     <h3 className="font-semibold">Uso Local</h3>
                     <p className="text-muted-foreground">
-                      Para uso em computador pessoal, exporte como HTML e abra o arquivo no navegador.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Google Drive</h3>
-                    <p className="text-muted-foreground">
-                      Faça upload do arquivo HTML para o Google Drive e abra com o navegador integrado.
+                      Os contratos são salvos automaticamente no navegador. Faça backup regularmente.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold">Backup de Dados</h3>
                     <p className="text-muted-foreground">
                       Baixe regularmente o arquivo JSON para guardar seus contratos com segurança.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Importar Dados</h3>
+                    <p className="text-muted-foreground">
+                      Utilize a função "Importar JSON" para restaurar contratos a partir de um backup.
                     </p>
                   </div>
                 </div>
