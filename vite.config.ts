@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
+  base: "/gpt-page/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
