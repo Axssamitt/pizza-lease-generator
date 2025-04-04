@@ -33,7 +33,20 @@ npm run build
 echo "Iniciando a aplicação..."
 npm run preview
 
-echo ""
-echo "=== Instalação concluída! ==="
-echo "A aplicação está rodando em http://localhost:4173"
+# Get the local IP address
+if command -v hostname &> /dev/null; then
+    IP=$(hostname -I | awk '{print $1}')
+    echo ""
+    echo "=== Instalação concluída! ==="
+    echo "A aplicação está rodando em:"
+    echo "- Local: http://localhost:4173"
+    if [ ! -z "$IP" ]; then
+        echo "- Rede: http://$IP:4173"
+    fi
+else
+    echo ""
+    echo "=== Instalação concluída! ==="
+    echo "A aplicação está rodando em http://localhost:4173"
+fi
+
 echo "Pressione Ctrl+C para encerrar quando terminar de usar."
