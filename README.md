@@ -22,7 +22,7 @@ Uma aplicação web para gerar contratos de eventos de pizza para a Julio's Pizz
 No Linux ou macOS, execute:
 
 ```bash
-curl -o install.sh https://raw.githubusercontent.com/seu-usuario/pizza-lease-generator/main/install.sh
+curl -o install.sh https://raw.githubusercontent.com/Axssamit/jphcontract/main/install.sh
 chmod +x install.sh
 ./install.sh
 ```
@@ -31,8 +31,8 @@ chmod +x install.sh
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/pizza-lease-generator.git
-   cd pizza-lease-generator
+   git clone https://github.com/Axssamit/jphcontract.git
+   cd jpphcontract
    ```
 
 2. Instale as dependências:
@@ -61,11 +61,3 @@ chmod +x install.sh
   ```bash
   npm run build
   ```
-
-## Suporte e Contribuições
-
-Para reportar bugs ou sugerir melhorias, crie uma issue no repositório do GitHub.
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT.
