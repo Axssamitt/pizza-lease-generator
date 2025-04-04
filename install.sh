@@ -18,8 +18,8 @@ fi
 
 # Clone the repository
 echo "Baixando o repositório do Git..."
-git clone https://github.com/seu-usuario/pizza-lease-generator.git
-cd pizza-lease-generator
+git clone https://github.com/seu-usuario/Axssamit/jphcontract.git
+cd jphcontract
 
 # Install dependencies
 echo "Instalando dependências..."
