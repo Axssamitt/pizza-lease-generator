@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
-  base: "/jphcontract/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
