@@ -19,9 +19,9 @@ import {
   defaultContractData, 
   calculateValues, 
   formatCurrency,
-  formatCpf,
   calculateBaseWaiters
 } from "@/utils/contractGenerator";
+import { formatDocument } from "@/utils/documentFormatter";
 
 interface ContractFormProps {
   onContractDataChange: (data: ContractData) => void;
@@ -74,7 +74,7 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
     if (name === "clientCpf") {
       setContractData(prev => ({
         ...prev,
-        [name]: formatCpf(value)
+        [name]: formatDocument(value)
       }));
       return;
     }
@@ -193,14 +193,14 @@ export function ContractForm({ onContractDataChange }: ContractFormProps) {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="clientCpf">CPF</Label>
+                  <Label htmlFor="clientCpf">CPF/CNPJ</Label>
                   <Input 
                     id="clientCpf" 
                     name="clientCpf"
-                    placeholder="000.000.000-00" 
+                    placeholder="000.000.000-00 ou 00.000.000/0000-00" 
                     value={contractData.clientCpf}
                     onChange={handleInputChange}
-                    maxLength={14}
+                    maxLength={18}
                   />
                 </div>
                 <div className="space-y-2">
