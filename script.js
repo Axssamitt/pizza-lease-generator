@@ -310,7 +310,14 @@ function attachInputChangeEvents() {
     this.value = formatDocument(doc);
   });
   
-  // Realtime calculations
+  // Realtime calculations for start time to update end time
+  document.getElementById('eventStartTime').addEventListener('change', function() {
+    updateContractData();
+    generateContract();
+    generateReceipt();
+  });
+  
+  // Realtime calculations for other inputs
   const calculationInputs = [
     'adultCount', 'childCount', 'extraWaiters',
     'adultPrice', 'childPrice', 'extraWaiterPrice'

@@ -54,9 +54,16 @@
                 <label for="eventAddress">Local do Evento:</label>
                 <input type="text" id="eventAddress" required>
               </div>
-              <div class="form-group">
-                <label for="eventStartTime">Hora de Início:</label>
-                <input type="time" id="eventStartTime" value="20:30" required>
+              <div class="form-group time-inputs">
+                <div class="time-input">
+                  <label for="eventStartTime">Hora de Início:</label>
+                  <input type="time" id="eventStartTime" value="20:30" required>
+                </div>
+                <div class="time-input">
+                  <label for="eventEndTime">Hora de Término:</label>
+                  <input type="time" id="eventEndTime" value="23:30" disabled>
+                  <small>Calculado automaticamente (3h após início)</small>
+                </div>
               </div>
             </fieldset>
 
