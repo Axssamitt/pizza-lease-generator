@@ -19,9 +19,9 @@ const defaultContractData = {
   extraWaiters: 0,
   
   // Preços
-  adultPrice: 55,
-  childPrice: 27.5,
-  extraWaiterPrice: 120,
+  adultPrice: 55.00,
+  childPrice: 27.50,
+  extraWaiterPrice: 120.00,
   
   // Pagamento
   totalValue: 0,
@@ -239,7 +239,9 @@ function generateContract() {
       
       <div class="signature">
         <p>__________________________</p>
-        <p>CONTRATADA</p>
+          <p>Júlio Cesar Fermino</p>
+          <p>CPF: 034.988.389-03</p>
+        <img src="https://github.com/Axssamitt/jphcontract/blob/main/public/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" wydth="500px">
       </div>
     </div>
   `;
@@ -286,6 +288,7 @@ function generateReceipt() {
           <p>__________________________</p>
           <p>Júlio Cesar Fermino</p>
           <p>CPF: 034.988.389-03</p>
+          <img src="https://github.com/Axssamitt/jphcontract/blob/main/public/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" wydth="500px">
         </div>
       </div>
     </div>
