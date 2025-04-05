@@ -241,7 +241,7 @@ function generateContract() {
         <p>__________________________</p>
           <p>Júlio Cesar Fermino</p>
           <p>CPF: 034.988.389-03</p>
-        <img src="https://github.com/Axssamitt/jphcontract/blob/main/public/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" wydth="500px">
+        <img src="340c9b38-0cac-4c58-a897-54ee0dd2412b.png">
       </div>
     </div>
   `;
@@ -288,7 +288,7 @@ function generateReceipt() {
           <p>__________________________</p>
           <p>Júlio Cesar Fermino</p>
           <p>CPF: 034.988.389-03</p>
-          <img src="https://github.com/Axssamitt/jphcontract/blob/main/public/lovable-uploads/340c9b38-0cac-4c58-a897-54ee0dd2412b.png" wydth="500px">
+          <img src="340c9b38-0cac-4c58-a897-54ee0dd2412b.png" wydth="500px">
         </div>
       </div>
     </div>
